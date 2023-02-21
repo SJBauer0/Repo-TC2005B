@@ -1,0 +1,32 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 6</title>
+  </head>
+  <body>
+    <h1 id="titulo" style="color:orange">Verificacion de Contraseña</h1>
+    <form action=" " method="get">
+      <label
+        style="color: blue; text-decoration: underline"
+        for="fname"
+        id="input1"
+        onmouseenter="onBtnEnterPass()"
+        >Escribe tu contraseña:
+      </label>
+      <input type="password" id="password" name="password" /><br /><br />
+      <label
+        style="color: blue; text-decoration: underline"
+        for="lname"
+        id="input2"
+        onmouseenter="onBtnEnterPassVar()"
+        >Vuelve a escribir tu contraseña:
+      </label>
+      <input type="password" id="passwordVer" name="passwordVer" /><br /><br />
+      <input type="submit" onclick="onBtnChange()" />
+    </form>
+    <h2 id="message"></h2>
+  </body>
+  <script src="script.js"></script>
+</html>
