@@ -1,35 +1,32 @@
 const fs = require('fs');
 const path = require('path');
 
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
 const Actions = require('../models/actions.model');
 const Type = require('../models/type.model');
 const multer = require('multer');
 
-exports.get_buscar = (req, res, next) => {
-  Actions.find(req.params.valor_busqueda).then(([rows, fieldData]) => {
-    res.status(200).json({actions: rows})
-  })
-  .catch(error => {
-    console.log(error)
-    res.status(500).json({message: "Internal Server Error"})
-  })
-}
-
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '.', 'uploads'));
+    cb(null, path.join(__dirname, '..', '/public/uploads'));
   },
   filename: (req, file, cb) => {
-      cb(null, new Date().toISOString() + '-' + file.originalname);
-  }
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  },
 });
 
-const upload =  multer({ storage: fileStorage })
+const upload = multer({ storage: fileStorage });
 
+exports.get_buscar = (request, response, next) => {
+    
+    Actions.find(request.params.id)
+    .then(([rows, fieldData]) => {
+        response.status(200).json({action: rows});
+    })
+    .catch(error => {
+        console.log(error);
+        response.status(500).json({message: "Internal Server Rrror"});
+    });
+};
 
 exports.getNew = (req, res, next) => {
   Type.fetchAll()
@@ -62,13 +59,16 @@ exports.postNew = (req, res, next) => {
       description: req.body.description,
       img: req.file.filename,
     });
-    action.save().then(([rows, fieldData]) => {
-      req.session.lastAction = action.name;
-      res.redirect('/todolist/actions');
-    }).catch(err => {
-      console.log(err);
-      return next(err);
-    });
+    action
+      .save()
+      .then(([rows, fieldData]) => {
+        req.session.lastAction = action.name;
+        res.redirect('/todolist/actions');
+      })
+      .catch((err) => {
+        console.log(err);
+        return next(err);
+      });
   });
 };
 

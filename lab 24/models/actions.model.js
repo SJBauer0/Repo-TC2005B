@@ -6,8 +6,18 @@ module.exports = class Action {
       (this.type = newAction.type || 1),
       (this.description = newAction.description || 'Desc'),
       (this.img =
-        newAction.img || 
-        'actions.jpg');
+        newAction.img || '2023-03-29T20:03:39.327Z-imagen.png');
+  }
+
+  static find(id) {
+    return db.execute(
+      `SELECT a.id, a.name, a.img, a.description, a.created_at, t.name as type 
+      FROM actions a, type t
+      WHERE a.idType = t.id 
+            AND (a.name LIKE ? OR a.description LIKE ? OR t.name LIKE ?)
+        `,
+      ['%' + id + '%', '%' + id + '%', '%' + id + '%']
+    );
   }
 
   save() {
@@ -24,17 +34,5 @@ module.exports = class Action {
             WHERE a.idType = t.id
             `
     );
-  }
-
-  static find(valor_busqueda) {
-    return db.execute(
-      `SELECT a.id, a.nombre, a.img, a.description, a.created_at, t.nombre as type 
-      FROM actions a, type t
-      WHERE a.idType = t.id 
-          AND (a.nombre LIKE ? OR a.descripcion LIKE ? OR t.nombre LIKE ?)
-      `, 
-      [ '%' + valor_busqueda + '%', '%' + valor_busqueda + '%', 
-          '%' + valor_busqueda + '%']
-    )
   }
 };

@@ -25,16 +25,4 @@ module.exports = class Goal {
             `
     );
   }
-
-  static find(valor_busqueda) {
-    return db.execute(
-      `SELECT g.id, g.nombre, g.img, g.description, g.created_at, t.nombre as type 
-      FROM goals g, type t
-      WHERE g.idType = t.id 
-          AND (g.nombre LIKE ? OR g.descripcion LIKE ? OR t.nombre LIKE ?)
-      `, 
-      [ '%' + valor_busqueda + '%', '%' + valor_busqueda + '%', 
-          '%' + valor_busqueda + '%']
-    )
-  }
 };
