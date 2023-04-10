@@ -7,7 +7,7 @@ module.exports = class Action {
       (this.description = newAction.description || 'Desc'),
       (this.img =
         newAction.img || 
-        'actions.jpg');
+        '2023-03-29T20:03:39.327Z-imagen.png');
   }
 
   save() {

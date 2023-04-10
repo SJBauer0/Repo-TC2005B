@@ -7,15 +7,14 @@ const multer = require('multer');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '..', 'uploads'));
+    cb(null, path.join(__dirname, '..', '/public/uploads'));
   },
   filename: (req, file, cb) => {
-      cb(null, new Date().toISOString() + '-' + file.originalname);
-  }
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  },
 });
 
-const upload =  multer({ storage: fileStorage })
-
+const upload = multer({ storage: fileStorage });
 
 exports.getNew = (req, res, next) => {
   Type.fetchAll()
@@ -48,13 +47,16 @@ exports.postNew = (req, res, next) => {
       description: req.body.description,
       img: req.file.filename,
     });
-    action.save().then(([rows, fieldData]) => {
-      req.session.lastAction = action.name;
-      res.redirect('/todolist/actions');
-    }).catch(err => {
-      console.log(err);
-      return next(err);
-    });
+    action
+      .save()
+      .then(([rows, fieldData]) => {
+        req.session.lastAction = action.name;
+        res.redirect('/todolist/actions');
+      })
+      .catch((err) => {
+        console.log(err);
+        return next(err);
+      });
   });
 };
 
